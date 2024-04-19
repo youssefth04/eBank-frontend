@@ -1,7 +1,7 @@
 import React,{Component} from "react";
-import Navbar from "../components/App/Navbar/Navbar";
-import Wallet from "../components/App/Wallet/Wallet";
-import Footer from "../components/App/Footer/Footer";
+import Navbar from "../components/Navbar/Navbar";
+import Wallet from "../components/Wallet/Wallet";
+import Footer from "../components/Footer/Footer";
 
 class WalletPage extends Component{
     render(){

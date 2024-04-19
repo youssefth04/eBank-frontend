@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
-import Sidebar from "../components/App/Sidebar/Sidebar";
-import IntroSection from "../components/App/IntroSection/IntroSection";
-import FeaturesSection from "../components/App/FeaturesSection/FeaturesSection";
-import MissionSection from "../components/App/MissionSection/MissionSection";
-import ContactSection from "../components/App/ContactSection/ContactSection";
-import Footer from "../components/App/Footer/Footer";
+import Sidebar from "../components/Sidebar/Sidebar";
+import IntroSection from "../components/IntroSection/IntroSection";
+import FeaturesSection from "../components/FeaturesSection/FeaturesSection";
+import MissionSection from "../components/MissionSection/MissionSection";
+import ContactSection from "../components/ContactSection/ContactSection";
+import Footer from "../components/Footer/Footer";
 
 
 

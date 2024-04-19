@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import Navbar from "../components/App/Navbar/Navbar"
-import Dashboard from "../components/App/Summary/Dashboard";
-import Footer from "../components/App/Footer/Footer";
+ import React, { Component } from "react";
+import Navbar from "../components/Navbar/Navbar"
+import Dashboard from "../components/Summary/Dashboard";
+import Footer from "../components/Footer/Footer";
 
 class DashboardPage extends Component {
     render() {

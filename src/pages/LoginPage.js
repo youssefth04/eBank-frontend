@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import LoginPopup from "../components/App/LoginPopup/LoginPopup";
-import Footer from "../components/App/Footer/Footer";
+import LoginPopup from "../components/LoginPopup/LoginPopup";
+import Footer from "../components/Footer/Footer";
 
 
 class LoginPage extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Signup from "../components/App/Signup/Signup";
-import Footer from "../components/App/Footer/Footer";
+import Signup from "../components/Signup/Signup";
+import Footer from "../components/Footer/Footer";
 
 class SignupPage extends Component {
     render() {

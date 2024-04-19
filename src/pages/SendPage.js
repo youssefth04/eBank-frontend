@@ -1,8 +1,8 @@
 import React, { Component } from "react";
- import Navbar from "../components/App/Navbar/Navbar";
-import Transfer from "../components/App/Transfer/Transfer";
-import Footer from "../components/App/Footer/Footer";
-import CurrencyConverter from "../components/App/CurrencyConverter/CurrencyConverter";
+ import Navbar from "../components/Navbar/Navbar";
+import Transfer from "../components/Transfer/Transfer";
+import Footer from "../components/Footer/Footer";
+import CurrencyConverter from "../components/CurrencyConverter/CurrencyConverter";
 
 
 
