@@ -7,8 +7,7 @@ import DashboardPage from '../../pages/DashboardPage';
 import SendPage from '../../pages/SendPage';
 import WalletPage from "../../pages/WalletPage";
 import RequestPage from "../../pages/RequestPage";
-import './App.css'
-import Popup from "./LinkcardPopup/LinkcardPopup";
+import './App.css';
 
 class App extends Component{
 	render(){
@@ -24,7 +23,7 @@ class App extends Component{
         <Route path='myaccount/transfer' element={<SendPage/>}/>
         <Route path="myaccount/wallet" element={<WalletPage/>}/>
         <Route path="myaccount/request" element={<RequestPage/>}/>
-        <Route path="popup" element={<Popup/>}/>
+        
       </Routes>
     </BrowserRouter>
     </div>
