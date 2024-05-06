@@ -8,7 +8,7 @@ class LoginPopup extends Component{
           <h2 style={{ marginLeft: '5em', marginBottom: '2em' }}>ACCOUNTS ACCESS</h2>
           <div className="split style1">
             <section>
-              <form>
+              <form >
                 <div className="fields">
                   <div className="field half">
                     <label htmlFor="username">Username</label>

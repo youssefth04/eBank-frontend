@@ -7,7 +7,7 @@ class Sidebar extends Component{
         <div className="inner">
             <nav>
                 <ul>
-                    <li><a href="index.html"><img alt="logoo" src="../../../img/hh.png" style={{ height: "10em", width: "20em", marginBottom: "2em", marginTop: "-2.2em", marginRight: "4em", marginLeft: "2em" }} /></a></li>
+                    <li><a href="/"><img alt="logoo" src="../../../img/hh.png" style={{ height: "10em", width: "20em", marginBottom: "2em", marginTop: "-2.2em", marginRight: "4em", marginLeft: "2em" }} /></a></li>
                     <li><a href="#intro">Home</a></li>
                     <li><a href="#two">Why us</a></li>
                     <li><a href="#one">about</a></li>

@@ -8,7 +8,7 @@ class Navbar extends Component {
           <nav>
             <ul>
               <li>
-                <a href="myaccount/dashboard">
+                <a href="dashboard">
                   <img src="../../../../img/hh.png" className="logo" alt="logohome" />
                 </a>
               </li>
