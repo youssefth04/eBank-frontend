@@ -6,7 +6,7 @@ class MissionSection extends Component{
         <section id="one" className="wrapper style2 spotlights">
         <section>
           <a href="index.html" className="image">
-            <img src="../../../img/3.jpg" alt="" data-position="center center"style={{ width: '400px', height: '400px' }}/>
+            <img src="/img/3.jpg" alt="" data-position="center center"style={{ width: '400px', height: '400px' }}/>
           </a>
           <div className="content">
             <div className="inner">

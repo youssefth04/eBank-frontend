@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 
 class Navbar extends Component {
+
+  
   render() {
+    const{a,b,c,d,e,f,img1,img2,btn}=this.props;
+    
     return (
       <section id="sidebar">
         <div className="inner">
@@ -12,23 +16,27 @@ class Navbar extends Component {
                   <img src="../../../../img/hh.png" className="logo" alt="logohome" />
                 </a>
               </li>
-              <li><a href="dashboard">Home</a></li>
-              <li><a href="transfer">send</a></li>
-              <li><a href="wallet">wallet</a></li>
-              <li><a href="#three">activity</a></li>
+              <li><a href="dashboard">{a}</a></li>
+              <li><a href="transfer">{b}</a></li>
+              <li><a href="wallet">{c}</a></li>
+              <li><a href="#three">{d}</a></li>
+
               <li className="notification1">
-                <a href="#three">
-                  <img src="../../../../img/téléchargement-removebg-preview.png" alt="notification" />
-                </a>
+              { img1 !=='none' &&  <a href="#three">
+              <img src={img1} alt="notification" />
+                </a>}
               </li>
               <li className="notification">
-                <a href="#three">
-                  <img src="../../../../img/images-removebg-preview.png" alt="settings" />
+            <a href="#three">
+            {img2 !== 'none' && <img src={img2} alt="" />}
                 </a>
               </li>
+              {e!=='none' && <li><a href="#three">{e}</a></li>}
+              {f!=='none' && <li><a href="#three">{f}</a></li>}
+
               <li>
                 <a href="#three">
-                  <button className="logout-btn">log out</button>
+                  <button className="logout-btn">{btn}</button>
                 </a>
               </li>
             </ul>

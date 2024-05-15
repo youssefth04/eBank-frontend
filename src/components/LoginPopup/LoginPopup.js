@@ -1,8 +1,20 @@
 import React,{Component} from "react";
+import DashboardPage from "../../pages/DashboardPage";
+
  
 class LoginPopup extends Component{
+  
+  
+
 	render(){
   return(
+
+    <div>
+      {this.authentified? 
+      
+      <DashboardPage/>
+      :
+
         <section id="three" className="wrapper style1 fade-up">
         <div className="inner">
           <h2 style={{ marginLeft: '5em', marginBottom: '2em' }}>ACCOUNTS ACCESS</h2>
@@ -47,6 +59,9 @@ class LoginPopup extends Component{
           </div>
         </div>
       </section>
+
+}
+      </div>
 
     );
 }

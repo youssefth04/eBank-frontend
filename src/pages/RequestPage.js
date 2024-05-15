@@ -8,7 +8,13 @@ class RequestPage extends Component{
     render(){
         return(
             <div>
-                       <Navbar/>
+     <Navbar a="Home" b="Send" c="Wallet" d="Activity" 
+            img1="../../../img/téléchargement-removebg-preview.png"
+             img2="../../../../img/images-removebg-preview.png" 
+             btn="Log Out"
+             e='none' f='none'
+             
+             />
                <div className=" bodysend">
                     <div className="container">
                         <div className="item">
