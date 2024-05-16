@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import LoginPopup from "../components/LoginPopup/LoginPopup";
+import Login from "../components/Login/Login";
 import Footer from "../components/Footer/Footer";
 
 
@@ -9,7 +9,7 @@ class LoginPage extends Component {
     return(
         <div>
           
-            <LoginPopup/>
+            <Login/>
             <Footer/>
         </div>
 
