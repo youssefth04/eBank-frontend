@@ -19,10 +19,10 @@ class App extends Component{
         <Route path='/home' element={<LandingPage/>}/>
         <Route path='/authentification' element={<LoginPage/>} />
         <Route path='/inscription' element={<SignupPage/>}/>
-        <Route path='myaccount/dashboard' element={<DashboardPage/>}/>
-        <Route path='myaccount/transfer' element={<SendPage/>}/>
-        <Route path="myaccount/wallet" element={<WalletPage/>}/>
-        <Route path="myaccount/request" element={<RequestPage/>}/>
+        <Route path='/myaccount/dashboard' element={<DashboardPage/>}/>
+        <Route path='/myaccount/transfer' element={<SendPage/>}/>
+        <Route path="/myaccount/wallet" element={<WalletPage/>}/>
+        <Route path="/myaccount/request" element={<RequestPage/>}/>
         
       </Routes>
     </BrowserRouter>
