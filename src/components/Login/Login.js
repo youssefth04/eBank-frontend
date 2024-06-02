@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import DashboardPage from "../../pages/DashboardPage";
 import Service from '../services/Service'
 
 class Login extends Component {
@@ -20,9 +19,7 @@ class Login extends Component {
       const response = await this.Service.signIn(username, password);
       console.log('Response from signIn:', response);
       if (response.message === 'Login successful') {
-        console.log('Login successful. Redirecting...');
-        // Render the DashboardPage component upon successful login
-        return <DashboardPage />;
+        window.location.href = '/myaccount/dashboard';
       } else {
         console.log('Login failed:', response.message);
         this.setState({ error: response.message });
@@ -65,12 +62,20 @@ class Login extends Component {
                         id="password" required minLength="8"
                         placeholder="Password" />
                     </div>
+                    <div className="container1">
+                    <label className="checkbox-container">
+                      Remember me
+                      <input type="checkbox" />
+                      <span className="checkmark"></span>
+                    </label>
+                  </div>
                   
                   </div>
                   {error && <p style={{ color: 'red' }}>{error}</p>}
                   <button type="submit" id="loginbtn">Log in</button>
                   <p style={{ textAlign: 'center', fontSize: '1.3em' }}>Don't have an account?<a style={{ color: 'rgb(255, 255, 255)', fontSize: '1.4em' }} href="inscription">  Sign up</a> </p>
                 </form>
+                
               </section>
               <section>
                 <ul className="contact">

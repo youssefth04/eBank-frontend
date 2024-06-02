@@ -1,5 +1,5 @@
 import Config from './Config';
-import CurrencyExchanger from 'currency-exchanger-js';
+
 
 
 export default class Service {
@@ -76,16 +76,65 @@ export default class Service {
         });
     }
 
-    convertCurrency(amount, fromCurrency, toCurrency) {
+    
+   
+    
+
+  
+   
+    Logout() {
         return new Promise((resolve, reject) => {
-            const currencyExchanger = new CurrencyExchanger();
-            currencyExchanger.convert(amount, fromCurrency, toCurrency)
-                .then(response => {
-                    resolve(response.convertedAmount);
-                })
-                .catch(error => {
-                    reject(new Error('Error converting currency. Please try again.'));
-                });
+            const logoutUrl = `${this.host}/logout`;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', logoutUrl, true); // Use true for asynchronous request
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+            xhr.onload = function() {
+                if (xhr.status === 200 && xhr.readyState==4) {
+                    resolve();
+                } else {
+                    reject(new Error('Logout failed'));
+                }
+            };
+    
+            xhr.onerror = () => {
+                reject(new Error('Network error'));
+            };
+    
+            xhr.send();
+        });
+    }
+    sendMoney(receiver, amount, currency) {
+        return new Promise((resolve, reject) => {
+            const sendMoneyUrl = `${this.host}/send-money`;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', sendMoneyUrl, true); // Use true for asynchronous request
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve(response);
+                } else {
+                    reject(new Error('Error sending money'));
+                }
+            };
+
+            xhr.ontimeout = () => {
+                reject(new Error('Request timed out'));
+            };
+
+            xhr.onerror = () => {
+                reject(new Error('Network error'));
+            };
+
+            const data = {
+                receiver,
+                amount,
+                currency
+            };
+
+            xhr.send(JSON.stringify(data));
         });
     }
 }

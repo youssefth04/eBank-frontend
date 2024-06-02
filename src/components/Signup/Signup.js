@@ -23,8 +23,8 @@ class Signup extends Component {
             const response = await this.Service.signUp(firstName, lastName, username, email, password);
             console.log(response);
             // Redirect to the login page
-            this.props.history.push('/login');
-        } catch (error)  {
+            window.location.href = '/authentification';
+            } catch (error)  {
             console.error("Error signing up:", error);
             // Handle sign-up failure
         }

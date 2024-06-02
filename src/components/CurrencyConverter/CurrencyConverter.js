@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import Service from '../services/Service';
+import { convertCurrency } from "fast-convert-currency";
 
-class CurrencyConverterComponent extends Component {
+class CurrencyConverter extends Component {
     constructor(props) {
         super(props);
         this.state = {
             amount: '',
-            fromCurrency: 'USD',
-            toCurrency: 'MAD',
+            fromCurrency: '',
+            toCurrency: '',
             convertedAmount: null,
             error: null
         };
-        this.service = new Service();
     }
 
     handleInputChange = (event) => {
@@ -29,9 +28,12 @@ class CurrencyConverterComponent extends Component {
         }
 
         try {
-            const convertedAmount = await this.service.convertCurrency(amount, fromCurrency, toCurrency);
+            const conversionResult = await convertCurrency(fromCurrency, toCurrency, amount);
+            
+            const convertedAmount = parseFloat(conversionResult.data.amount);
             this.setState({ convertedAmount, error: null });
         } catch (error) {
+            console.error("Error converting currency:", error);
             this.setState({ error: "Error converting currency. Please try again." });
         }
     }
@@ -41,9 +43,9 @@ class CurrencyConverterComponent extends Component {
 
         return (
             <div>
-                <h2 style={{ textAlign: "center" }}>Currency converter</h2>
+                <h2 style={{ textAlign: "center" }}>Currency Converter</h2>
                 <form onSubmit={this.handleFormSubmit}>
-                    <label htmlFor="amount">Amount :</label>
+                    <label htmlFor="amount">Amount:</label>
                     <input
                         className="money"
                         type="number"
@@ -63,6 +65,7 @@ class CurrencyConverterComponent extends Component {
                             onChange={this.handleInputChange}
                         >
                             <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
                             <option value="MAD">MAD</option>
                             {/* Add more options as needed */}
                         </select>
@@ -74,6 +77,7 @@ class CurrencyConverterComponent extends Component {
                             onChange={this.handleInputChange}
                         >
                             <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
                             <option value="MAD">MAD</option>
                             {/* Add more options as needed */}
                         </select>
@@ -82,7 +86,7 @@ class CurrencyConverterComponent extends Component {
                 </form>
                 {convertedAmount !== null && (
                     <h3 id="Results" style={{ textAlign: "center" }}>
-                        Converted Amount: {convertedAmount}
+                        Converted Amount: {convertedAmount.toFixed(2)}
                     </h3>
                 )}
                 {error && (
@@ -95,4 +99,4 @@ class CurrencyConverterComponent extends Component {
     }
 }
 
-export default CurrencyConverterComponent;
+export default CurrencyConverter;
