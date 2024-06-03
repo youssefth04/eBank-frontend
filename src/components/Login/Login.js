@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Service from '../services/Service'
-import Dashboard from "../Summary/Dashboard";
+import Service from '../services/Service';
 
 class Login extends Component {
   constructor(props) {
@@ -8,13 +7,12 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      error: '',
-      authentified: false // Initialize authentified state
+      error: ''
+       // Initialize authentified state
     };
     this.Service = new Service();
   }
 
-  // Function to handle the login process
   handlLogin = async (event) => {
     event.preventDefault();
 
@@ -23,13 +21,18 @@ class Login extends Component {
       const response = await this.Service.signIn(username, password);
       console.log('Response from signIn:', response);
       if (response.message === 'Login successful') {
-        // Upon successful login, check session credentials
         const sessionToken = response.sessionToken;
         const sessionResponse = await this.Service.checkCredentialCall(sessionToken);
-        if (sessionResponse === 'authenticated') {
-          // Set authentified state to true if session is authenticated
+        console.log('User authenticated:', sessionResponse === 'authenticated');
+        console.log('Session response:', sessionResponse);
+
+
+      
           this.setState({ authentified: true });
-        }
+        
+          window.location.href = '/myaccount/dashboard';
+
+        
       } else {
         console.log('Login failed:', response.message);
         this.setState({ error: response.message });
@@ -46,9 +49,10 @@ class Login extends Component {
   }
 
   render() {
-    const { username, password, error, authentified } = this.state;
+    const { username, password, error } = this.state;
 
-    return (authentified ? <Dashboard /> :
+    return (
+    
       <div>
         <section id="three" className="wrapper style1 fade-up">
           <div className="inner">

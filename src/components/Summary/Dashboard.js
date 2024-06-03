@@ -1,14 +1,45 @@
-import React,{Component} from "react";
- 
-class Dashboard extends Component{
-	render(){
-    return(
-        <div>
-      
+import React, { Component } from "react";
+import Service from "../services/Service";
+
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      balance: 0.00,
+      currency: 'USD',
+    };
+    this.Service = new Service();
+  }
+
+  componentDidMount() {
+    this.fetchBalance();
+  }
+
+  fetchBalance = async () => {
+    try {
+      const response = await this.Service.getBalance();
+      if (response.balance !== undefined && response.currency !== undefined) {
+        this.setState({
+          balance: response.balance,
+          currency: response.currency
+        });
+      } else {
+        console.error('Invalid response format:', response);
+      }
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  };
+
+  render() {
+    const { balance, currency } = this.state;
+
+    return (
+      <div>
         <div className="container">
           <div className="item">
             <h2>Balance</h2>
-            <h1>0,00 USD</h1>
+            <h1>{balance.toFixed(2)} {currency}</h1>
             <h5>available</h5>
             <button>transfer funds</button>
           </div>
@@ -42,10 +73,9 @@ class Dashboard extends Component{
             <a href="wallet">Link a card or Bank</a>
           </div>
         </div>
-        
       </div>
-
     );
+  }
 }
-}
-export default Dashboard
+
+export default Dashboard;
