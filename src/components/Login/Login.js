@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Service from '../services/Service'
+import Dashboard from "../Summary/Dashboard";
 
 class Login extends Component {
   constructor(props) {
@@ -7,45 +8,28 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      error: ''
-    }
+      error: '',
+      authentified: false // Initialize authentified state
+    };
     this.Service = new Service();
-  
-  var nameEQ = "addressHubRemberKey" + "=";
-  var ca = document.cookie.split(';');
-  var sessionToken;
-  for(var i=0;i < ca.length;i++) {
-      var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) {
-        sessionToken = c.substring(nameEQ.length,c.length);
-      }
   }
 
-  var response = this.Service.checkCredentialCall(sessionToken);
-  if (response === 'authentified') {
-    this.authentified = true;
-  } else {
-    this.authentified = false;
-  }
-}
-
+  // Function to handle the login process
   handlLogin = async (event) => {
     event.preventDefault();
-     //GSe9PUpzf6zh2ZwdLLNPePxbwhzD2SIc0tez4$t12xKK$4HIl3hI.PS4Gg    
-     var chars = '$13$csKLGt9Cdp2fazMehIdA4.Hxe6UgozDZ!l0ckbjwyV7v4NWP0qz8S';
-     var sessionToken = '';
-     for(var i = 0; i < 58; i++) {
-       sessionToken += chars[Math.floor(Math.random() * chars.length)];
-     }
-     sessionToken = sessionToken.replace('/', '#');
-     document.cookie = "addressHubRemberKey="+sessionToken; 
 
     const { username, password } = this.state;
     try {
-      const response = await this.Service.signIn(username, password,sessionToken);
+      const response = await this.Service.signIn(username, password);
       console.log('Response from signIn:', response);
       if (response.message === 'Login successful') {
+        // Upon successful login, check session credentials
+        const sessionToken = response.sessionToken;
+        const sessionResponse = await this.Service.checkCredentialCall(sessionToken);
+        if (sessionResponse === 'authenticated') {
+          // Set authentified state to true if session is authenticated
+          this.setState({ authentified: true });
+        }
       } else {
         console.log('Login failed:', response.message);
         this.setState({ error: response.message });
@@ -62,8 +46,9 @@ class Login extends Component {
   }
 
   render() {
-    const { username, password, error } = this.state;
-    return (
+    const { username, password, error, authentified } = this.state;
+
+    return (authentified ? <Dashboard /> :
       <div>
         <section id="three" className="wrapper style1 fade-up">
           <div className="inner">
@@ -89,19 +74,18 @@ class Login extends Component {
                         placeholder="Password" />
                     </div>
                     <div className="container1">
-                    <label className="checkbox-container">
-                      Remember me
-                      <input type="checkbox" />
-                      <span className="checkmark"></span>
-                    </label>
-                  </div>
-                  
+                      <label className="checkbox-container">
+                        Remember me
+                        <input type="checkbox" />
+                        <span className="checkmark"></span>
+                      </label>
+                    </div>
                   </div>
                   {error && <p style={{ color: 'red' }}>{error}</p>}
                   <button type="submit" id="loginbtn">Log in</button>
                   <p style={{ textAlign: 'center', fontSize: '1.3em' }}>Don't have an account?<a style={{ color: 'rgb(255, 255, 255)', fontSize: '1.4em' }} href="inscription">  Sign up</a> </p>
                 </form>
-                
+
               </section>
               <section>
                 <ul className="contact">

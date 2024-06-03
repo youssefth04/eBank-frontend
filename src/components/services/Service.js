@@ -82,14 +82,13 @@ export default class Service {
         const checkurl = `${this.host}/checkcredential`;
         const xhr = new XMLHttpRequest();
 
-        xhr.open('POST', checkurl, false);
+        xhr.open('POST', checkurl, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 resolve(response);
-                const authenticated=ture;
             } else {
                 reject(new Error('Sign-in failed'));
             }
