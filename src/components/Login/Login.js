@@ -10,16 +10,42 @@ class Login extends Component {
       error: ''
     }
     this.Service = new Service();
+  
+  var nameEQ = "addressHubRemberKey" + "=";
+  var ca = document.cookie.split(';');
+  var sessionToken;
+  for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) {
+        sessionToken = c.substring(nameEQ.length,c.length);
+      }
   }
+
+  var response = this.Service.checkCredentialCall(sessionToken);
+  if (response === 'authentified') {
+    this.authentified = true;
+  } else {
+    this.authentified = false;
+  }
+}
 
   handlLogin = async (event) => {
     event.preventDefault();
+     //GSe9PUpzf6zh2ZwdLLNPePxbwhzD2SIc0tez4$t12xKK$4HIl3hI.PS4Gg    
+     var chars = '$13$csKLGt9Cdp2fazMehIdA4.Hxe6UgozDZ!l0ckbjwyV7v4NWP0qz8S';
+     var sessionToken = '';
+     for(var i = 0; i < 58; i++) {
+       sessionToken += chars[Math.floor(Math.random() * chars.length)];
+     }
+     sessionToken = sessionToken.replace('/', '#');
+     document.cookie = "addressHubRemberKey="+sessionToken; 
+
     const { username, password } = this.state;
     try {
-      const response = await this.Service.signIn(username, password);
+      const response = await this.Service.signIn(username, password,sessionToken);
       console.log('Response from signIn:', response);
       if (response.message === 'Login successful') {
-        window.location.href = '/myaccount/dashboard';
       } else {
         console.log('Login failed:', response.message);
         this.setState({ error: response.message });

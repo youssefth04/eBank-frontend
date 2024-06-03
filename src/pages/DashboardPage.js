@@ -1,4 +1,4 @@
- import React, { Component } from "react";
+import React, { Component } from "react";
 import Navbar from "../components/Navbar/Navbar"
 import Dashboard from "../components/Summary/Dashboard";
 import Footer from "../components/Footer/Footer";

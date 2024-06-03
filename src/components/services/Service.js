@@ -42,7 +42,7 @@ export default class Service {
         });
     }
 
-    signIn(username, password) {
+    signIn(username, password,sessionToken) {
         return new Promise((resolve, reject) => {
             const signInUrl = `${this.host}/login`;
             const xhr = new XMLHttpRequest();
@@ -69,18 +69,43 @@ export default class Service {
 
             const userData = {
                 username,
-                password
+                password,
+                sessionToken
             };
 
             xhr.send(JSON.stringify(userData));
         });
     }
 
-    
-   
-    
+    checkCredentialCall(sessionToken) {
+    return new Promise((resolve, reject) => {
+        const checkurl = `${this.host}/checkcredential`;
+        const xhr = new XMLHttpRequest();
 
-  
+        xhr.open('POST', checkurl, false);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                resolve(response);
+                const authenticated=ture;
+            } else {
+                reject(new Error('Sign-in failed'));
+            }
+        };
+
+        xhr.ontimeout = () => {
+            reject(new Error('Request timed out'));
+        };
+
+        xhr.onerror = () => {
+            reject(new Error('Network error'));
+        };
+
+        xhr.send(JSON.stringify({ sessionToken }));
+    });
+}
    
     Logout() {
         return new Promise((resolve, reject) => {
@@ -90,7 +115,7 @@ export default class Service {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     
             xhr.onload = function() {
-                if (xhr.status === 200 && xhr.readyState==4) {
+                if (xhr.status === 200) {
                     resolve();
                 } else {
                     reject(new Error('Logout failed'));
@@ -108,33 +133,67 @@ export default class Service {
         return new Promise((resolve, reject) => {
             const sendMoneyUrl = `${this.host}/send-money`;
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', sendMoneyUrl, true); // Use true for asynchronous request
+            xhr.open('POST', sendMoneyUrl, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-
+    
             xhr.onload = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+                if (xhr.readyState === 4) {
                     const response = JSON.parse(xhr.responseText);
-                    resolve(response);
-                } else {
-                    reject(new Error('Error sending money'));
+                    if (xhr.status === 200) {
+                        resolve(response);
+                    } else if (xhr.status === 400) {
+                        reject(new Error(response.error || 'Bad Request'));
+                    } else if (xhr.status === 500) {
+                        reject(new Error(response.error || 'Internal Server Error'));
+                    } else {
+                        reject(new Error('Unexpected response status: ' + xhr.status));
+                    }
                 }
             };
-
+    
             xhr.ontimeout = () => {
                 reject(new Error('Request timed out'));
             };
-
+    
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
-
+    
             const data = {
+            
                 receiver,
                 amount,
                 currency
             };
-
+    
             xhr.send(JSON.stringify(data));
         });
     }
+    getBalance() {
+        return new Promise((resolve, reject) => {
+          const url = `${this.host}/balance`; // Adjust the endpoint URL as necessary
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', url, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+    
+          xhr.onload = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              resolve(response);
+            } else {
+              reject(new Error('Error fetching balance'));
+            }
+          };
+    
+          xhr.onerror = () => {
+            reject(new Error('Network error'));
+          };
+    
+          xhr.send();
+        });
+      }
+
+    
+
+    
 }
