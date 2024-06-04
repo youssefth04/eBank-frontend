@@ -7,7 +7,19 @@ import Service from "../components/services/Service";
 class DashboardPage extends Component {
     constructor(props) {
         super(props);
-        this.service = new Service();
+        this.Service = new Service();
+        this.handleLogout = this.handleLogout.bind(this);
+    }
+
+    handleLogout() {
+        this.Service.logout()
+            .then(() => {
+                console.log('Logout successful');
+                window.location.href = '/authentification';
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+            });
     }
 
     render() {
@@ -23,12 +35,11 @@ class DashboardPage extends Component {
                     btn="Log Out"
                     e="none" 
                     f="none"
-                    onLogout={this.service.Logout} 
+                    onLogout={this.handleLogout} // Use bound method
                 />
-
-                <body className="bodysend">
+                <div className="bodysend">
                     <Dashboard />
-                </body>
+                </div>
                 <Footer />
             </div>
         );

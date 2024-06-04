@@ -7,6 +7,7 @@ import DashboardPage from '../../pages/DashboardPage';
 import SendPage from '../../pages/SendPage';
 import WalletPage from "../../pages/WalletPage";
 import RequestPage from "../../pages/RequestPage";
+import ProtectedRoutes from "../utils/ProtectedRoutes";
 import './App.css';
 
 class App extends Component{
@@ -19,12 +20,13 @@ class App extends Component{
         <Route path='/home' element={<LandingPage/>}/>
         <Route path='/authentification' element={<LoginPage/>} />
         <Route path='/inscription' element={<SignupPage/>}/>
+
+        <Route element={<ProtectedRoutes/>}>
                <Route path='/myaccount/dashboard' element={<DashboardPage/>}/>
               <Route path='/myaccount/transfer' element={<SendPage/>}/>
                <Route path="/myaccount/wallet" element={<WalletPage/>}/>
                <Route path="/myaccount/request" element={<RequestPage/>}/>
-          
-        
+               </Route>
       </Routes>
     </BrowserRouter>
     </div>

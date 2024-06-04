@@ -19,16 +19,22 @@ class Navbar extends Component {
                             <li><a href="wallet">{c}</a></li>
                             <li><a href="#three">{d}</a></li>
 
-                            <li className="notification1">
-                                {img1 !== 'none' && <a href="#three">
-                                    <img src={img1} alt="notification" />
-                                </a>}
-                            </li>
-                            <li className="notification">
-                                <a href="#three">
-                                    {img2 !== 'none' && <img src={img2} alt="" />}
-                                </a>
-                            </li>
+                            {img1 !== 'none' && (
+                                <li className="notification1">
+                                    <a href="#three">
+                                        <img src={img1} alt="notification" />
+                                    </a>
+                                </li>
+                            )}
+
+                            {img2 !== 'none' && (
+                                <li className="notification">
+                                    <a href="#three">
+                                        <img src={img2} alt="" />
+                                    </a>
+                                </li>
+                            )}
+
                             {e !== 'none' && <li><a href="#three">{e}</a></li>}
                             {f !== 'none' && <li><a href="#three">{f}</a></li>}
 

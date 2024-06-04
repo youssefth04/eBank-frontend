@@ -113,26 +113,26 @@ export default class Service {
         return new Promise((resolve, reject) => {
             const logoutUrl = `${this.host}/logout`;
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', logoutUrl, true); // Use true for asynchronous request
+            xhr.open('POST', logoutUrl, true); // true for asynchronous request
             xhr.setRequestHeader('Authorization', `Bearer ${this.sessionToken}`);
-        
+
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    // Remove the session token from local storage
                     localStorage.removeItem('sessionToken');
                     resolve();
                 } else {
-                    reject(new Error('Logout failed'));
+                    reject(new Error('Logout failed: ' + xhr.statusText));
                 }
             };
-        
+
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
-        
+
             xhr.send();
         });
     }
+
     sendMoney(receiver, amount) {
         return new Promise((resolve, reject) => {
             const sendMoneyUrl = `${this.host}/send-money`;
