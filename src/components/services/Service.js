@@ -3,6 +3,7 @@ import Config from './Config';
 export default class Service {
     constructor() {
         this.host = Config.host;
+        this.sessionToken = this.getSessionToken();
     }
 
     getSessionToken() {
@@ -14,11 +15,11 @@ export default class Service {
             const signUpUrl = `${this.host}/register`;
             const xhr = new XMLHttpRequest();
             
-            xhr.open('POST', signUpUrl, true);
+            xhr.open('POST', signUpUrl, false);
             xhr.setRequestHeader('Content-Type', 'application/json');
 
             xhr.onload = function() {
-                if (xhr.status === 200) {
+                if (xhr.readyState === 4 && xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     resolve(response);
                 } else {
@@ -30,11 +31,14 @@ export default class Service {
                 reject(new Error('Request timed out'));
             };
 
-            xhr.onerror = () => {
-                reject(new Error('Network error'));
+            const userData = {
+                firstName,
+                lastName,
+                username,
+                email,
+                password
             };
 
-            const userData = { firstName, lastName, username, email, password };
             xhr.send(JSON.stringify(userData));
         });
     }
@@ -47,24 +51,26 @@ export default class Service {
             xhr.open('POST', signInUrl, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
     
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.sessionToken) {
-                        localStorage.setItem('sessionToken', response.sessionToken);
-                        resolve(response);
+            xhr.onload = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.sessionToken) {
+                            localStorage.setItem('sessionToken', response.sessionToken);
+                            resolve(response);
+                        } else {
+                            reject(new Error('Session token not found in response'));
+                        }
                     } else {
-                        reject(new Error('Session token not found in response'));
+                        reject(new Error('Sign-in failed'));
                     }
-                } else {
-                    reject(new Error('Sign-in failed'));
                 }
             };
     
             xhr.ontimeout = () => {
                 reject(new Error('Request timed out'));
             };
-
+    
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
@@ -74,22 +80,20 @@ export default class Service {
         });
     }
 
-    checkCredentialCall() {
+    checkCredentialCall(sessionToken) {
         return new Promise((resolve, reject) => {
-            const checkUrl = `${this.host}/checkcredential`;
+            const checkurl = `${this.host}/checkcredential`;
             const xhr = new XMLHttpRequest();
-            const sessionToken = this.getSessionToken();
 
-            xhr.open('POST', checkUrl, true);
+            xhr.open('POST', checkurl, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('Authorization', `Bearer ${sessionToken}`);
 
             xhr.onload = function() {
-                if (xhr.status === 200) {
+                if (xhr.readyState === 4 && xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     resolve(response);
                 } else {
-                    reject(new Error('Credential check failed'));
+                    reject(new Error('Sign-in failed'));
                 }
             };
 
@@ -101,7 +105,7 @@ export default class Service {
                 reject(new Error('Network error'));
             };
 
-            xhr.send();
+            xhr.send(JSON.stringify({ sessionToken }));
         });
     }
 
@@ -109,54 +113,60 @@ export default class Service {
         return new Promise((resolve, reject) => {
             const logoutUrl = `${this.host}/logout`;
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', logoutUrl, true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    
+            xhr.open('POST', logoutUrl, true); // Use true for asynchronous request
+            xhr.setRequestHeader('Authorization', `Bearer ${this.sessionToken}`);
+        
             xhr.onload = function() {
                 if (xhr.status === 200) {
+                    // Remove the session token from local storage
                     localStorage.removeItem('sessionToken');
                     resolve();
                 } else {
                     reject(new Error('Logout failed'));
                 }
             };
-
+        
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
-
+        
             xhr.send();
         });
     }
-
-    sendMoney(receiver, amount, currency) {
+    sendMoney(receiver, amount) {
         return new Promise((resolve, reject) => {
             const sendMoneyUrl = `${this.host}/send-money`;
             const xhr = new XMLHttpRequest();
-            const sessionToken = this.getSessionToken();
-
             xhr.open('POST', sendMoneyUrl, true);
+            const sessionToken = this.getSessionToken();
+    
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.setRequestHeader('Authorization', `Bearer ${sessionToken}`);
-
+    
             xhr.onload = function() {
-                const response = JSON.parse(xhr.responseText);
-                if (xhr.status === 200) {
-                    resolve(response);
-                } else {
-                    reject(new Error(response.error || 'Error sending money'));
+                if (xhr.readyState === 4) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (xhr.status === 200) {
+                        resolve(response);
+                    } else if (xhr.status === 400) {
+                        reject(new Error(response.error || 'Bad Request'));
+                    } else if (xhr.status === 500) {
+                        reject(new Error(response.error || 'Internal Server Error'));
+                    } else {
+                        reject(new Error('Unexpected response status: ' + xhr.status));
+                    }
                 }
             };
-
+    
             xhr.ontimeout = () => {
                 reject(new Error('Request timed out'));
             };
-
+    
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
-
-            const data = { receiver, amount, currency };
+    
+            const data = { receiver, amount };
             xhr.send(JSON.stringify(data));
         });
     }
@@ -165,25 +175,24 @@ export default class Service {
         return new Promise((resolve, reject) => {
             const url = `${this.host}/balance`;
             const xhr = new XMLHttpRequest();
-            const sessionToken = this.getSessionToken();
-
             xhr.open('GET', url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
+            const sessionToken = this.getSessionToken();
             xhr.setRequestHeader('Authorization', `Bearer ${sessionToken}`);
-      
+
             xhr.onload = function() {
-                if (xhr.status === 200) {
+                if (xhr.readyState === 4 && xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     resolve(response);
                 } else {
                     reject(new Error('Error fetching balance'));
                 }
             };
-      
+
             xhr.onerror = () => {
                 reject(new Error('Network error'));
             };
-      
+
             xhr.send();
         });
     }

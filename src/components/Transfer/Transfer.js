@@ -7,7 +7,6 @@ class Transfer extends Component {
         this.state = {
             receiver: '',
             amount: '',
-            currency: 'USD',
             message: '',
         };
 
@@ -20,8 +19,8 @@ class Transfer extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const { receiver, amount, currency } = this.state;
-        this.service.sendMoney(receiver, amount, currency)
+        const { receiver, amount } = this.state;
+        this.service.sendMoney(receiver, amount)
             .then(response => {
                 this.setState({ message: 'Money sent successfully!' });
             })
@@ -31,7 +30,7 @@ class Transfer extends Component {
     };
 
     render() {
-        const { receiver, amount, currency, message } = this.state;
+        const { receiver, amount, message } = this.state;
 
         return (
             <div>
@@ -40,30 +39,18 @@ class Transfer extends Component {
                     <input
                         type="text"
                         name="receiver"
-                        placeholder="Email, username"
+                        placeholder="Receiver Username"
                         value={receiver}
                         onChange={this.handleChange}
                     />
                     <br />
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <input
-                            type="number"
-                            name="amount"
-                            placeholder="Min 5 USD"
-                            min="5"
-                            value={amount}
-                            onChange={this.handleChange}
-                        />
-                        <select
-                            name="currency"
-                            value={currency}
-                            onChange={this.handleChange}
-                        >
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="MAD">MAD</option>
-                        </select>
-                    </div>
+                    <input
+                        type="number"
+                        name="amount"
+                        placeholder="Amount"
+                        value={amount}
+                        onChange={this.handleChange}
+                    />
                     <button
                         type="submit"
                         style={{ backgroundColor: '#03087f', marginTop: '3em' }}

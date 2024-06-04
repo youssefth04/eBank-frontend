@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Navbar from "../components/Navbar/Navbar"
+import Navbar from "../components/Navbar/Navbar";
 import Dashboard from "../components/Summary/Dashboard";
 import Footer from "../components/Footer/Footer";
 import Service from "../components/services/Service";
@@ -9,10 +9,6 @@ class DashboardPage extends Component {
         super(props);
         this.service = new Service();
     }
-
-    Logout = () => {
-        this.service.Logout();
-    };
 
     render() {
         return (
@@ -27,7 +23,7 @@ class DashboardPage extends Component {
                     btn="Log Out"
                     e="none" 
                     f="none"
-                    onLogout={this.Logout} 
+                    onLogout={this.service.Logout} 
                 />
 
                 <body className="bodysend">
