@@ -1,15 +1,26 @@
-import React from "react";
+import React, { Component } from "react";
 import { Outlet, Navigate } from "react-router-dom";
+import Service from "../services/Service";
 
-const ProtectedRoutes = ({ authenticated }) => {
-    // Check if the user is authenticated
-    if (authenticated) {
-        // If authenticated, render the child routes
-        return <Outlet />;
-    } else {
-        // If not authenticated, redirect to the authentication page
-        return <Navigate to='/authentification' />;
+class ProtectedRoutes extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            isauthenticated:''
+        }
+    this.Service= new Service;
     }
-};
+    handlesession=()=>{
+    const response= this.Service.checkCredentialCall(localStorage.getItem('session token'))
+    if(response=='Authenticated'){
+        <Outlet/> 
+    }
+    else{}
+}
 
+ }
+    
+
+
+  
 export default ProtectedRoutes;

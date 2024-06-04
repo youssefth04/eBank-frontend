@@ -6,7 +6,7 @@ class CurrencyConverter extends Component {
         super(props);
         this.state = {
             amount: '',
-            fromCurrency: '',
+            fromCurrency: 'USD',
             toCurrency: '',
             convertedAmount: null,
             error: null
